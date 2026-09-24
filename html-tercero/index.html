@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Very Good Butchers — Acceso</title>
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<main class="auth" data-mode="sign-in" id="authPanel" aria-live="polite">
+
+  <div class="auth__forms">
+    <div class="auth__form-slot" data-form="sign-in" data-active="true">
+      <form class="form" id="signInForm" novalidate>
+        <img class="brand" src="assets/LogoCarnicero.png" alt="The Very Good Butchers">
+        <h2>Iniciar sesión</h2>
+        <div class="field" data-field="email">
+          <label for="si-email">Correo</label>
+          <input id="si-email" name="email" type="email" autocomplete="email" required>
+          <small class="error">Ingresa un correo válido.</small>
+        </div>
+        <div class="field" data-field="password">
+          <label for="si-password">Contraseña</label>
+          <input id="si-password" name="password" type="password" autocomplete="current-password" minlength="6" required>
+          <small class="error">Mínimo 6 caracteres.</small>
+        </div>
+        <button class="btn btn--primary" type="submit">Entrar</button>
+        <p class="status" data-status></p>
+        <p class="mobile-switch">¿No tienes cuenta? <button type="button" data-switch-to="sign-up">Regístrate</button></p>
+      </form>
+    </div>
+
+    <div class="auth__form-slot" data-form="sign-up" data-active="false">
+      <form class="form" id="signUpForm" novalidate>
+        <img class="brand" src="assets/LogoCarnicero.png" alt="The Very Good Butchers">
+        <h2>Crear cuenta</h2>
+        <div class="field" data-field="name">
+          <label for="su-name">Nombre</label>
+          <input id="su-name" name="name" type="text" autocomplete="name" required>
+          <small class="error">Cuéntanos tu nombre.</small>
+        </div>
+        <div class="field" data-field="email">
+          <label for="su-email">Correo</label>
+          <input id="su-email" name="email" type="email" autocomplete="email" required>
+          <small class="error">Ingresa un correo válido.</small>
+        </div>
+        <div class="field" data-field="password">
+          <label for="su-password">Contraseña</label>
+          <input id="su-password" name="password" type="password" autocomplete="new-password" minlength="6" required>
+          <small class="error">Mínimo 6 caracteres.</small>
+        </div>
+        <button class="btn btn--primary" type="submit">Registrarme</button>
+        <p class="status" data-status></p>
+        <p class="mobile-switch">¿Ya tienes cuenta? <button type="button" data-switch-to="sign-in">Inicia sesión</button></p>
+      </form>
+    </div>
+  </div>
+
+  <div class="auth__overlay-track" aria-hidden="true">
+    <div class="auth__overlay">
+      <div class="auth__overlay-panel">
+        <img class="mascot" src="assets/DexterAlAtaque.png" alt="">
+        <h2>¡Hola de nuevo!</h2>
+        <p>Ingresa tus datos para seguir usando todas las funciones del sitio.</p>
+        <button class="btn btn--ghost" type="button" data-switch-to="sign-in">Iniciar sesión</button>
+      </div>
+      <div class="auth__overlay-panel">
+        <img class="mascot" src="assets/DexterAlAtaque.png" alt="">
+        <h2>¡Bienvenido!</h2>
+        <p>Regístrate con tus datos personales y accede a todas las funciones.</p>
+        <button class="btn btn--ghost" type="button" data-switch-to="sign-up">Registrarme</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>

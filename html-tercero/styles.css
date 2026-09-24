@@ -1,0 +1,285 @@
+:root {
+  --bg: #120708;
+  --bg-grid: #1A0C0E;
+  --surface: #1C1013;
+  --surface-alt: #241417;
+  --border: #3A1E22;
+  --border-soft: #2A1519;
+  --ink: #F3E9EA;
+  --ink-soft: #B79599;
+  --ink-mute: #7C5D61;
+  --accent: #E8354A;
+  --accent-strong: #FF4D63;
+  --accent-dim: #6E1C27;
+  --accent-glow: rgba(232, 53, 74, 0.35);
+  --ok: #3FAE6A;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --ease: cubic-bezier(.22, 1, .36, 1);
+
+  /* Solo fuentes del sistema: la app debe correr sin internet.
+     Usamos una única familia y variamos peso/tracking para
+     diferenciar títulos y texto (ver .form h2 y body). */
+  --font-display: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* ---- Space tokens (4px base unit) ---- */
+  --space-unit: 0.25rem;
+  --space-1: calc(var(--space-unit) * 1);
+  --space-2: calc(var(--space-unit) * 2);
+  --space-3: calc(var(--space-unit) * 3);
+  --space-4: calc(var(--space-unit) * 4);
+  --space-5: calc(var(--space-unit) * 6);
+  --space-6: calc(var(--space-unit) * 8);
+  --space-7: calc(var(--space-unit) * 12);
+
+  /* ---- Type scale ---- */
+  --scale-ratio: 1.2;
+  --font-size-sm: 0.83rem;
+  --font-size-base: 1rem;
+  --font-size-lg: calc(var(--font-size-base) * var(--scale-ratio));
+  --font-size-xl: calc(var(--font-size-lg) * var(--scale-ratio));
+
+  /* ---- Motion / layout tokens ---- */
+  --duration-slow: 0.7s;
+  --duration-fast: 0.2s;
+  --panel-width: min(880px, 92vw);
+  --panel-height: 540px;
+  --overlay-fraction: 50%;
+  --grid-cell: 32px;
+
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+*, *::before, *::after { box-sizing: inherit; }
+
+html, body { height: 100%; margin: 0; }
+
+body {
+  display: grid;
+  place-items: center;
+  min-height: 100%;
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--bg-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
+  background-size: var(--grid-cell) var(--grid-cell);
+  font-family: var(--font-body);
+  color: var(--ink);
+  padding: var(--space-4);
+}
+
+/* ---------- Panel shell ---------- */
+.auth {
+  position: relative;
+  width: var(--panel-width);
+  height: var(--panel-height);
+  max-width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--border-soft) inset;
+  overflow: hidden;
+}
+
+.auth__forms {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  width: 200%;
+  height: 100%;
+  transition: transform var(--duration-slow) var(--ease);
+  transform: translateX(0%);
+}
+
+.auth[data-mode="sign-up"] .auth__forms {
+  transform: translateX(calc(-1 * var(--overlay-fraction)));
+}
+
+.auth__form-slot {
+  width: var(--overlay-fraction);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: var(--space-6) var(--space-7);
+}
+
+.auth__form-slot[data-form="sign-in"] { justify-content: flex-start; }
+.auth__form-slot[data-form="sign-up"] { justify-content: flex-end; }
+
+.brand {
+  height: 20px;
+  width: auto;
+  margin-bottom: var(--space-5);
+  filter: invert(1);
+  opacity: 0.92;
+}
+
+/* ---------- Overlay ---------- */
+.auth__overlay-track {
+  position: absolute;
+  top: 0;
+  left: var(--overlay-fraction);
+  width: var(--overlay-fraction);
+  height: 100%;
+  overflow: hidden;
+  transition: left var(--duration-slow) var(--ease);
+  pointer-events: none;
+}
+
+.auth[data-mode="sign-up"] .auth__overlay-track { left: 0%; }
+
+.auth__overlay {
+  position: relative;
+  width: 200%;
+  height: 100%;
+  left: -100%;
+  display: flex;
+  background:
+    radial-gradient(120% 140% at 20% 0%, var(--accent-glow), transparent 60%),
+    linear-gradient(165deg, var(--accent-dim), #4a1017 65%, var(--bg));
+  transition: left var(--duration-slow) var(--ease);
+  pointer-events: auto;
+}
+
+.auth[data-mode="sign-up"] .auth__overlay { left: 0%; }
+
+.auth__overlay-panel {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-6);
+  color: var(--ink);
+}
+
+.auth__overlay-panel img.mascot {
+  height: 150px;
+  width: auto;
+  object-fit: contain;
+  margin-bottom: var(--space-3);
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.5));
+}
+
+.auth__overlay-panel h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  font-size: var(--font-size-xl);
+  margin: 0 0 var(--space-3);
+}
+
+.auth__overlay-panel p {
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+  margin: 0 0 var(--space-5);
+  color: var(--ink-soft);
+}
+
+/* ---------- Form contents ---------- */
+.form {
+  width: 100%;
+  max-width: 20rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.form h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  font-size: var(--font-size-xl);
+  margin: 0 0 var(--space-2);
+  color: var(--ink);
+}
+
+.field { display: flex; flex-direction: column; gap: var(--space-1); }
+
+.field label { font-size: var(--font-size-sm); color: var(--ink-mute); }
+
+.field input {
+  font: inherit;
+  font-size: var(--font-size-base);
+  padding: var(--space-3);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--surface-alt);
+  color: var(--ink);
+}
+
+.field input::placeholder { color: var(--ink-mute); }
+
+.field input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-color: var(--accent);
+}
+
+.field small.error { display: none; color: var(--accent-strong); font-size: var(--font-size-sm); }
+.field[data-invalid="true"] input { border-color: var(--accent-strong); }
+.field[data-invalid="true"] small.error { display: block; }
+
+.btn {
+  font: inherit;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease), background var(--duration-fast) var(--ease);
+}
+
+.btn:active { transform: scale(0.97); }
+
+.btn--primary {
+  background: var(--accent);
+  color: var(--ink);
+  margin-top: var(--space-2);
+}
+.btn--primary:hover { background: var(--accent-strong); }
+
+.btn--ghost {
+  background: transparent;
+  border-color: var(--ink-soft);
+  color: var(--ink);
+}
+.btn--ghost:hover { border-color: var(--ink); }
+
+.status { min-height: 1.4em; font-size: var(--font-size-sm); color: var(--ok); }
+
+.mobile-switch { display: none; font-size: var(--font-size-sm); color: var(--ink-soft); }
+.mobile-switch button {
+  background: none; border: none; color: var(--accent-strong);
+  font-weight: 600; cursor: pointer; padding: 0;
+}
+
+/* ---------- Small screens: swap the slide for a plain toggle ---------- */
+@media (max-width: 640px) {
+  :root { --panel-height: 580px; }
+
+  .auth__forms { width: 100%; transform: none !important; flex-direction: column; }
+  .auth__form-slot {
+    width: 100%; position: absolute; inset: 0; padding: var(--space-5);
+    opacity: 0; justify-content: center;
+    transition: opacity var(--duration-fast) var(--ease);
+  }
+  .auth__form-slot[data-active="true"] { opacity: 1; position: relative; }
+  .auth__form-slot[data-active="false"] { pointer-events: none; }
+
+  .auth__overlay-track { display: none; }
+
+  .mobile-switch { display: flex; justify-content: center; gap: var(--space-2); margin-top: var(--space-4); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth__forms, .auth__overlay-track, .auth__overlay, .auth__form-slot, .btn {
+    transition-duration: 0.001ms !important;
+  }
+}
